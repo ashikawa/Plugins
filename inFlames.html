@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="ja" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta name="author" content="s.ashikawa" />
+	<meta name="robots" content="index,follow" />
+	<link href="/Plugins/style/reset.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/Plugins/style/layout.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/Plugins/style/common.css" media="screen" rel="stylesheet" type="text/css" />
+	<link href="/Plugins/style/portal.css" media="screen" rel="stylesheet" type="text/css" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/Plugins/js/jquery.inFlames.js"></script>
+	<title>inFlames | Plugins</title>
+<style type="text/css">
+.target{
+	width: 200px;height: 200px;
+}
+.target:nth-child(odd) {
+	background-color: #BFFFCF;
+}
+.target:nth-child(even) {
+	background-color: #AAECFF;
+}
+
+</style>
+<script>
+$(function(){
+	$("#maintarget").inFlames(
+		function () {
+			console.log("is in");
+		},
+		function () {
+			console.log("is out");
+		}
+	);
+});
+</script>
+</head>
+<body>
+
+	<div id="header">
+		<h1><a href="/Plugins/">jQuery.inFlames.js</a></h1>
+	</div>
+	
+	<div id="middle">
+		<div id="main">
+			
+			<div class="contents">
+			
+				<div class="target"></div>
+				<div class="target"></div>
+				<div class="target"></div>
+				<div class="target"></div>
+				<div class="target" id="maintarget">target</div>
+				<div class="target"></div>
+				<div class="target"></div>
+				<div class="target"></div>
+			</div>
+			
+		</div>
+		
+		<div id="sidebar">
+			<div class="contents">
+				top<br />
+			</div>
+		</div>
+
+	</div>
+	
+	<div id="footer">
+		<p class="copyright">copy right...</p>
+	</div><!--//end div#footer-->
+</body>
+</html>
