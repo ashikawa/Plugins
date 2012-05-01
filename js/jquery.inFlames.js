@@ -17,7 +17,7 @@
 				
 				var $this		= $(this);
 				
-				$window.bind("scroll resize", function(e){
+				$window.bind("scroll resize", function (e) {
 					
 					var scrollTop	= $window.scrollTop(),
 						position	= $this.position(),
@@ -45,13 +45,13 @@
 				});
 				
 				if (isin) {
-					$this.bind("inflames:in", function(){
+					$this.bind("inflames:in", function () {
 						isin.apply(this, []);
 					});
 				}
 				
 				if (isout) {
-					$this.bind("inflames:out", function(){
+					$this.bind("inflames:out", function () {
 						isout.apply(this, []);
 					});
 				}
