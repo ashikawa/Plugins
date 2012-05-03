@@ -1,3 +1,6 @@
+/**
+ * 汎用バリデータ
+ */
 (function () {
 	
 	function isFunction(x) {
@@ -14,11 +17,19 @@
 		};
 	}
 	
+	function valid(val) {
+		return function (v) {
+			return val.isValid(v);
+		};
+	}
 	
 	var global = (function () { return this; }()),
 		methods = {
 			"notEmpty": function (val) {
 				return (val) ? true : false;
+			},
+			"notZero": function (val) {
+				return (val !== 0 && val !== "0");
 			},
 			"mail": regex(/^(?:\w+\.?)*\w+@(?:\w+\.)+\w+$/),
 			"phone": regex(/^[\d\.\+\#\*\-]*$/)
@@ -26,36 +37,74 @@
 	
 	
 	function Validator(rules) {
-		this.rules = rules;
+		this.rules = rules || {};
 	}
 	
-	Validator.prototype.addRule = function (rule) {
-		this.rules.push(rule);
+	Validator.prototype.addRule = function (key, rule) {
+		this.rules[key] = rule;
 	};
 	
 	Validator.prototype.isValid = function (val) {
 		
-		var len = this.rules.length,
+		var rules = this.rules,
 			rule,
-			i;
+			method,
+			failer = {},
+			result = true,
+			k;
 		
-		for (i = 0; i < len; i++) {
+		if (val === undefined) {
+			val = this.getValue();
+		}
+		
+		for (k in rules) {
 			
-			rule = this.rules[i];
+			if (!rules.hasOwnProperty(k)) {
+				continue;
+			}
+			
+			rule	= this.rules[k];
+			method	= null;
+			
 			if (isString(rule)) {
-				rule = methods[rule];
+				method = methods[rule];
 			}
 			
 			if (rule instanceof RegExp) {
-				rule = regex(rule);
+				method = regex(rule);
 			}
 			
-			if (!rule.apply(this, [val])) {
-				return false;
+			if (rule instanceof Validator) {
+				method = valid(rule);
+			}
+			
+			if (isFunction(rule)) {
+				method = rule;
+			}
+			
+			if (!method) {
+				throw "wrong rule type";
+			}
+			
+			if (!method.apply(this, [val])) {
+				failer[k] = rule;
+				result = false;
 			}
 		}
-		return true;
+		
+		if (result) {
+			this.onSuccess();
+		} else {
+			this.onError(failer);
+		}
+		
+		return result;
 	};
+	
+	Validator.prototype.getValue	= function () {};
+	Validator.prototype.onError		= function () {};
+	Validator.prototype.onSuccess	= function () {};
+	
 	
 	global.Validator = Validator;
 }());
