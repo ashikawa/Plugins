@@ -1,5 +1,7 @@
 /**
  * 汎用バリデータ
+ * 
+ * @author a.shigeru
  */
 (function () {
 	
@@ -31,17 +33,33 @@
 			"notZero": function (val) {
 				return (val !== 0 && val !== "0");
 			},
-			"mail": regex(/^(?:\w+\.?)*\w+@(?:\w+\.)+\w+$/),
+			"mail": regex(/^(?:\w+\.\+?)*[\w\+]+@(?:\w+\.)+\w+$/),
 			"phone": regex(/^[\d\.\+\#\*\-]*$/)
 		};
 	
 	
 	function Validator(rules) {
+		
+		if (isFunction(rules)) {
+			rules = {"default": rules};
+		}
+		
 		this.rules = rules || {};
 	}
 	
 	Validator.prototype.addRule = function (key, rule) {
-		this.rules[key] = rule;
+		
+		var i;
+		
+		if( isString(key) ){
+			this.rules[key] = rule;
+			return this;
+		}
+		
+		for (var i in key) {
+			this.addRule(i, key[i]);
+		}
+		return this;
 	};
 	
 	Validator.prototype.isValid = function (val) {
@@ -49,7 +67,7 @@
 		var rules = this.rules,
 			rule,
 			method,
-			failer = {},
+			failure = {},
 			result = true,
 			k;
 		
@@ -87,7 +105,7 @@
 			}
 			
 			if (!method.apply(this, [val])) {
-				failer[k] = rule;
+				failure[k] = rule;
 				result = false;
 			}
 		}
@@ -95,7 +113,7 @@
 		if (result) {
 			this.onSuccess();
 		} else {
-			this.onError(failer);
+			this.onError(failure);
 		}
 		
 		return result;
