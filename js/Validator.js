@@ -51,12 +51,17 @@
 		
 		var i;
 		
-		if( isString(key) ){
+		if (isString(key)) {
 			this.rules[key] = rule;
 			return this;
 		}
 		
-		for (var i in key) {
+		for (i in key) {
+			
+			if (!key.hasOwnProperty(i)) {
+				continue;
+			}
+			
 			this.addRule(i, key[i]);
 		}
 		return this;
