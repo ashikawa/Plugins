@@ -1,4 +1,4 @@
-(function(jQuery) {
+(function($) {
 	
 	function _parseUrl(url){
 		var params	= {}
